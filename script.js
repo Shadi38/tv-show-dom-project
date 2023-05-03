@@ -1,25 +1,31 @@
 //variables:
 const rootElem = document.getElementById("root");
 const lable = document.getElementById("lable");
+const allEpisodes = getAllEpisodes();
+const select = document.querySelector("#select");
 
 
+
+//showing all episodes
 function setup() {
   const allEpisodes = getAllEpisodes();
   makePageForEpisodes(allEpisodes);
 }
-
+//showing one episode
 function makePageForEpisodes(episodeList) {
    let output="";
   episodeList.forEach((episode) => {
-    
+    let seasonStr = episode.season.toString().padStart(2, "0");
+    let episodeStr = episode.number.toString().padStart(2, "0");
     output += `
     <div style="background-color:white; width:250px; higth:300px;">
-    <h1 style="color:black;">${episode.name}</h1>
+    <h1 style="color:black;">${episode.name} - S${seasonStr}E${episodeStr}</h1>
     <img src="${episode.image.medium}"></img>
     <div><p>${episode.summary}</p></div>
     </div>
     `;
     
+    return output;
   });
 
 
@@ -36,34 +42,47 @@ window.onload = setup();
 
 // acces to input's value
 const input = document.querySelector("#search-bar");
-input.addEventListener("input", function () {
+input.addEventListener("keyup", function(e) {
   let result = "";
-  const inputValue = input.value;
+
+  const inputValue = e.target.value;
   const allEpisodes = getAllEpisodes();
-  
+  let inputValueInsensitive = new RegExp(inputValue, "i");
   let selectedEpisodes = allEpisodes.filter((episode) => {
     if (
-      episode.name.includes(inputValue) ||
-      episode.summary.includes(inputValue)
+      episode.name.match(inputValueInsensitive) !== null ||
+      episode.summary.match(inputValueInsensitive) !== null
     ) {
-     return episode; 
+      return episode;
     }
   });
-  
-rootElem.innerText = "";
-selectedEpisodes.forEach((selectEpisode)=>{
 
-result += `
-    <div style="background-color:white; width:250px; higth:300px;">
-    <h1 style="color:black;">${selectEpisode.name}</h1>
-    <img src="${selectEpisode.image.medium}"></img>
-    <div><p>${selectEpisode.summary}</p></div>
-    </div>
-    `;
-})
- rootElem.innerHTML = result;
-lable.innerText = `Displaying  ${selectedEpisodes.length}/${allEpisodes.length}  episodes`;
-   
+    result = makePageForEpisodes(selectedEpisodes); 
+  
+  lable.innerText = `Displaying  ${selectedEpisodes.length}/${allEpisodes.length}  episodes`;
 });
 
+ //fill the select element with all episoses 
+allEpisodes.forEach((episode) => {
+  let option = document.createElement("option");
+  let seasonEpisodeNumber = getSeasonEpisodeNumber(episode);
+  option.innerText = `${episode.name} ${seasonEpisodeNumber}`;
+  select.appendChild(option);
+});
  
+ 
+
+ //get seseon and episode number from all episodes
+ function getSeasonEpisodeNumber(episode) {
+   let seasonStr = episode.season.toString().padStart(2, "0");
+   let episodeStr = episode.number.toString().padStart(2, "0");
+   return `- S${seasonStr}E${episodeStr}`;
+ }
+
+ //select one option from select element
+ select.addEventListener("change", (event) => {
+   
+   rootElem.textContent = "";
+   rootElem.textContent = `You like ${event.target.value}`;
+   
+ });
