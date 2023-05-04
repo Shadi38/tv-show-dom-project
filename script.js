@@ -3,8 +3,7 @@ const rootElem = document.getElementById("root");
 const lable = document.getElementById("lable");
 const allEpisodes = getAllEpisodes();
 const select = document.querySelector("#select");
-
-
+const searchBar = document.querySelector("#search-bar");
 
 //showing all episodes
 function setup() {
@@ -13,7 +12,7 @@ function setup() {
 }
 //showing one episode
 function makePageForEpisodes(episodeList) {
-   let output="";
+  let output = "";
   episodeList.forEach((episode) => {
     let seasonStr = episode.season.toString().padStart(2, "0");
     let episodeStr = episode.number.toString().padStart(2, "0");
@@ -24,25 +23,21 @@ function makePageForEpisodes(episodeList) {
     <div><p>${episode.summary}</p></div>
     </div>
     `;
-    
-    return output;
   });
-
 
   const rootElem = document.getElementById("root");
   rootElem.innerHTML = output;
   let episodeNumber = document.createElement("div");
   episodeNumber.textContent = `Got ${episodeList.length} episode(s)`;
   rootElem.appendChild(episodeNumber);
+  return output;
 }
 
 window.onload = setup();
 
-
-
 // acces to input's value
 const input = document.querySelector("#search-bar");
-input.addEventListener("keyup", function(e) {
+input.addEventListener("keyup", function (e) {
   let result = "";
 
   const inputValue = e.target.value;
@@ -57,32 +52,46 @@ input.addEventListener("keyup", function(e) {
     }
   });
 
-    result = makePageForEpisodes(selectedEpisodes); 
-  
+  result = makePageForEpisodes(selectedEpisodes);
+
   lable.innerText = `Displaying  ${selectedEpisodes.length}/${allEpisodes.length}  episodes`;
 });
 
- //fill the select element with all episoses 
+//fill the select element with all episoses
 allEpisodes.forEach((episode) => {
   let option = document.createElement("option");
   let seasonEpisodeNumber = getSeasonEpisodeNumber(episode);
   option.innerText = `${episode.name} ${seasonEpisodeNumber}`;
   select.appendChild(option);
 });
- 
- 
 
- //get seseon and episode number from all episodes
- function getSeasonEpisodeNumber(episode) {
-   let seasonStr = episode.season.toString().padStart(2, "0");
-   let episodeStr = episode.number.toString().padStart(2, "0");
-   return `- S${seasonStr}E${episodeStr}`;
- }
+//get seseon and episode number from all episodes
+function getSeasonEpisodeNumber(episode) {
+  let seasonStr = episode.season.toString().padStart(2, "0");
+  let episodeStr = episode.number.toString().padStart(2, "0");
+  return `-S${seasonStr}E${episodeStr}`;
+}
 
- //select one option from select element
- select.addEventListener("change", (event) => {
-   
-   rootElem.textContent = "";
-   rootElem.textContent = `You like ${event.target.value}`;
-   
- });
+//select one option from select element
+select.addEventListener("change", (event) => {
+  rootElem.textContent = "";
+
+  if (event.target.value !== "all episodes") {
+    console.log(event.target.value);
+    searchBar.value = "";
+    const selectedEpisode = event.target.value.slice(-2);
+    const selectedSeason = event.target.value.slice(-5, -3);
+    const selectedMovie = allEpisodes.filter((episode) => {
+      if (
+        episode.season == selectedSeason &&
+        episode.number == selectedEpisode
+      ) {
+        return episode;
+      }
+    });
+    rootElem.innerHTML = makePageForEpisodes(selectedMovie);
+  } else {
+    searchBar.value = "";
+    setup();
+  }
+});
