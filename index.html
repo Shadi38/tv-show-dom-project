@@ -10,19 +10,22 @@
 
   <body>
     <div id="main-root">
-      <lable
-        >choose episode:
-        <select id="select">
+      <select id="select-show">
+        <option value="all show" selected>shows</option>
+      </select>
+      <lable>
+        choose episode:
+        <select id="select" class="margin-top-bottun">
           <option value="all episodes" selected>all episodes</option>
         </select>
       </lable>
-      <input type="text" id="search-bar" name="search-bar"  placeholder="search"/>
+      <input type="text" id="search-bar" name="search-bar"  placeholder="search" />
       <label for="search-bar" id="lable"> Displaying 0/ 0 episodes</label>
       <section id="root" class="root"></section>
     </div>
     <!-- Loads a provided function called getAllEpisodes() which returns all episodes -->
     <script src="episodes.js"></script>
-
+    <script src="shows.js"></script>
     <!-- Loads YOUR javascript code -->
     <script src="script.js"></script>
   </body>
