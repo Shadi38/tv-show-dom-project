@@ -129,7 +129,6 @@ function fetchEpisodesForShow(showId){
 fetch(`https://api.tvmaze.com/shows/${showId}/episodes`)
   .then((Response) => Response.json())
   .then((result) => {
-    console.log(result);
     makePageForEpisodes(result)
     select.innerText="";
     //fill select box to show all episodes ralated to selected show by select show 
@@ -149,7 +148,7 @@ fetch(`https://api.tvmaze.com/shows/${showId}/episodes`)
     
  output += `
     <div id="showPage">  
-      <div style="display:flex;align-items:center;">  
+      
              <div id="divShowImg" >
                <img src="${show.image !== null ? show.image.medium : ""}"> 
              </div>
@@ -165,7 +164,7 @@ fetch(`https://api.tvmaze.com/shows/${showId}/episodes`)
                  <li>Runtime:${show.runtime}</li>
                </ul>
              </div>
-      </div>  
+       
     </div>    
       
       `;
@@ -177,6 +176,7 @@ fetch(`https://api.tvmaze.com/shows/${showId}/episodes`)
   button.addEventListener("click",(event)=>{
    event.preventDefault();
    rootElem.textContent = "";
+   input.value = "";
    makePageForShow(allShows);
   })
 
