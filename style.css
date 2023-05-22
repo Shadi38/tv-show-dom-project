@@ -5,25 +5,74 @@ body{
 #root {
   color: rgb(146, 139, 139);
 }
+
 .root{
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: auto;
   gap: 20px;
 text-align: center;
-
 }
+
 @media screen and (min-width: 600px) {
   .root{
     grid-template-columns: 1fr 1fr 1fr;
     column-gap: 5px;
   }
 }
-.back-btn{
+
+/* .back-btn{
   height: 30px;
   width: 100px;
-}
+} */
+
 .margin-top-bottun{
   margin-top: 20px;
   margin-bottom: 40px;
+}
+
+#showPage{
+  display: grid;
+  width: 100%;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-template-areas:'showImg showSummary showUl';
+  gap: 20px;
+  background-color: rgba(230, 228, 228, 0.664);
+}
+
+#divShowImg{
+grid-area: showImg;
+width: 25%;
+}
+
+#divShowSummary{
+grid-area: showSummary;
+background-color: rgb(248, 248, 246);
+padding: 10px;
+border-radius: 4px;
+width: 50%;
+}
+
+#divShowUl{
+grid-area: showUl;
+background-color: rgb(248, 248, 246);
+margin-left: 20px;
+border-radius: 4px;
+width: 25%;
+}
+
+ul{
+  list-style-type: none;
+}
+
+#div-btn{
+display: flex;
+justify-content: center;
+margin-bottom: 20px;
+}
+
+#btn{
+  text-align: center;
+  margin:10px;
 }
